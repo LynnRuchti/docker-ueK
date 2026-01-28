@@ -1,10 +1,13 @@
  # Will create a node environment in the container
-FROM node:16-alpine AS builder
+FROM node:20-alpine AS builder
  # Will create a directory app and switch to that directory
 WORKDIR /app
 # Copies package.json file and soruce code to /app directory
 COPY package.json .
 COPY .env.production .
+COPY tsconfig.json .
+COPY vite.config.ts .
+COPY index.html .
 COPY ./public ./public
 COPY ./src ./src
 
