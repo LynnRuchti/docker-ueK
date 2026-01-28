@@ -1,0 +1,17 @@
+# Ignore build outputs (will be created during Docker build)
+.gradle
+build
+bin
+
+# Ignore IDE and git
+.idea
+.vscode
+.git
+*.iml
+
+# Ignore logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

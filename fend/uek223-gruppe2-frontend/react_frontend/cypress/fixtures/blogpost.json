@@ -1,0 +1,22 @@
+{
+  "valid": {
+    "title": "Test Blog Post Title",
+    "text": "This is a valid blog post content that is longer than 20 characters for testing purposes.",
+    "category": "Technology"
+  },
+  "invalidShortTitle": {
+    "title": "Test",
+    "text": "This is a valid blog post content that is longer than 20 characters.",
+    "category": "Technology"
+  },
+  "invalidShortText": {
+    "title": "Valid Title Here",
+    "text": "Too short",
+    "category": "Technology"
+  },
+  "invalidNoCategory": {
+    "title": "Valid Title Here",
+    "text": "This is a valid blog post content that is longer than 20 characters.",
+    "category": null
+  }
+}

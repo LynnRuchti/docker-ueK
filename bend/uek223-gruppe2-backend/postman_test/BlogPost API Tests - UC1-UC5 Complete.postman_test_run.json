@@ -1,0 +1,1479 @@
+{
+	"id": "07f81cd3-63ba-4d26-88d9-57b2c0a87e77",
+	"name": "BlogPost API Tests - UC1-UC5 Complete",
+	"timestamp": "2026-01-22T12:34:16.014Z",
+	"collection_id": "51568188-2ff44d79-b7e8-4827-b95b-38005b059b86",
+	"folder_id": 0,
+	"environment_id": "51568188-f6e055a6-a3ac-4062-a3ac-5a4713acb477",
+	"totalPass": 72,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2026-01-22T12:34:10.897Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "7d263659-6022-4432-9e40-9f4837ff3315",
+			"name": "Login as Admin",
+			"url": "http://localhost:8080/user/login",
+			"time": 330,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Response has Authorization header": true,
+				"Token is extracted and stored": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has Authorization header": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Token is extracted and stored": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				330
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Response has Authorization header": true,
+					"Token is extracted and stored": true
+				}
+			]
+		},
+		{
+			"id": "4d53a2be-a121-4b10-9dd6-f5ac74c8139d",
+			"name": "Login as User",
+			"url": "http://localhost:8080/user/login",
+			"time": 62,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Response has Authorization header": true,
+				"Token is extracted and stored": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has Authorization header": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Token is extracted and stored": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				62
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Response has Authorization header": true,
+					"Token is extracted and stored": true
+				}
+			]
+		},
+		{
+			"id": "ef948c40-8174-4e5a-b5b7-f80178442d8c",
+			"name": "Create blog post with valid data (User)",
+			"url": "http://localhost:8080/blogpost",
+			"time": 156,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code is 201 Created": true,
+				"Response has blog post object": true,
+				"Title matches input": true,
+				"Author is automatically assigned": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201 Created": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has blog post object": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Title matches input": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Author is automatically assigned": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				156
+			],
+			"allTests": [
+				{
+					"Status code is 201 Created": true,
+					"Response has blog post object": true,
+					"Title matches input": true,
+					"Author is automatically assigned": true
+				}
+			]
+		},
+		{
+			"id": "cff4e643-430c-48ef-a5a5-fdb2c87a74cb",
+			"name": "Create blog post with valid data (Admin)",
+			"url": "http://localhost:8080/blogpost",
+			"time": 23,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code is 201 Created": true,
+				"Response has blog post object": true,
+				"Author is admin": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201 Created": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has blog post object": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Author is admin": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				23
+			],
+			"allTests": [
+				{
+					"Status code is 201 Created": true,
+					"Response has blog post object": true,
+					"Author is admin": true
+				}
+			]
+		},
+		{
+			"id": "e20b1e0c-da0c-4d3b-b240-1f22c5b2fb0a",
+			"name": "Create without authentication (403)",
+			"url": "http://localhost:8080/blogpost",
+			"time": 7,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 403 Forbidden": true
+			},
+			"testPassFailCounts": {
+				"Status code is 403 Forbidden": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				7
+			],
+			"allTests": [
+				{
+					"Status code is 403 Forbidden": true
+				}
+			]
+		},
+		{
+			"id": "6c5d8b84-9551-404f-b6b9-31d329162624",
+			"name": "Create with title too short (<5 chars)",
+			"url": "http://localhost:8080/blogpost",
+			"time": 22,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400 Bad Request": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400 Bad Request": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				22
+			],
+			"allTests": [
+				{
+					"Status code is 400 Bad Request": true
+				}
+			]
+		},
+		{
+			"id": "740af82c-688a-4c36-866d-2540f049130b",
+			"name": "Create with text too short (<20 chars)",
+			"url": "http://localhost:8080/blogpost",
+			"time": 15,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400 Bad Request": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400 Bad Request": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Status code is 400 Bad Request": true
+				}
+			]
+		},
+		{
+			"id": "68250a59-79f0-4df0-97c3-ebe051b1e32e",
+			"name": "Create with empty category",
+			"url": "http://localhost:8080/blogpost",
+			"time": 13,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400 Bad Request": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400 Bad Request": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Status code is 400 Bad Request": true
+				}
+			]
+		},
+		{
+			"id": "c9628105-1be5-46ba-bc8c-4f2d4fca7a9a",
+			"name": "Create with very long title (edge case)",
+			"url": "http://localhost:8080/blogpost",
+			"time": 13,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400 Bad Request": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400 Bad Request": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Status code is 400 Bad Request": true
+				}
+			]
+		},
+		{
+			"id": "66d2137e-f75b-4601-855d-42a35b716846",
+			"name": "Create with special characters",
+			"url": "http://localhost:8080/blogpost",
+			"time": 18,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code is 201 Created": true,
+				"Special characters are preserved": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201 Created": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Special characters are preserved": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Status code is 201 Created": true,
+					"Special characters are preserved": true
+				}
+			]
+		},
+		{
+			"id": "7cd8f19e-f88e-4f48-99b6-2e2a78255324",
+			"name": "Get all blog posts (default pagination)",
+			"url": "http://localhost:8080/blogpost",
+			"time": 51,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Response has pagination structure": true,
+				"Page size is 5 (UC4 requirement)": true,
+				"Content array has at most 5 items": true,
+				"Each blog post has required fields": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has pagination structure": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Page size is 5 (UC4 requirement)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content array has at most 5 items": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Each blog post has required fields": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				51
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Response has pagination structure": true,
+					"Page size is 5 (UC4 requirement)": true,
+					"Content array has at most 5 items": true,
+					"Each blog post has required fields": true
+				}
+			]
+		},
+		{
+			"id": "f2856452-1eb0-4c80-9174-e961bb7f19c5",
+			"name": "Get blog posts - page 2",
+			"url": "http://localhost:8080/blogpost?page=1",
+			"time": 20,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Current page is 1 (0-indexed page 2)": true,
+				"Page size is still 5": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Current page is 1 (0-indexed page 2)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Page size is still 5": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Current page is 1 (0-indexed page 2)": true,
+					"Page size is still 5": true
+				}
+			]
+		},
+		{
+			"id": "e415acd1-2c37-41ef-9154-0d4fa362b1cb",
+			"name": "Get blog posts - sorted by title ASC",
+			"url": "http://localhost:8080/blogpost?sortBy=title&sortOrder=asc",
+			"time": 17,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Posts are sorted by title in ascending order": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Posts are sorted by title in ascending order": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Posts are sorted by title in ascending order": true
+				}
+			]
+		},
+		{
+			"id": "8f3373a9-b6f9-4c35-9bc5-97f48fb9b60f",
+			"name": "Get blog posts - sorted by category DESC",
+			"url": "http://localhost:8080/blogpost?sortBy=category&sortOrder=desc",
+			"time": 17,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Response has content": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has content": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Response has content": true
+				}
+			]
+		},
+		{
+			"id": "44025a09-0387-417d-81a0-de7df61ac609",
+			"name": "Get blog posts - filtered by category 'Technology'",
+			"url": "http://localhost:8080/blogpost?category=Technology",
+			"time": 16,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"All posts have category 'Technology'": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All posts have category 'Technology'": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"All posts have category 'Technology'": true
+				}
+			]
+		},
+		{
+			"id": "9d704a09-7f76-447c-8acb-38b557175fca",
+			"name": "Get blog posts - filtered by author ID",
+			"url": "http://localhost:8080/blogpost?authorId=0d8fa44c-54fd-4cd0-ace9-2a7da57992de",
+			"time": 18,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"All posts have correct author ID": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All posts have correct author ID": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"All posts have correct author ID": true
+				}
+			]
+		},
+		{
+			"id": "2a47e972-de7f-4fa3-ab1e-ce74ad5d7071",
+			"name": "Get blog posts - combined filter (category + author)",
+			"url": "http://localhost:8080/blogpost?category=Development&authorId=0d8fa44c-54fd-4cd0-ace9-2a7da57992de",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"All posts match both filters": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"All posts match both filters": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"All posts match both filters": true
+				}
+			]
+		},
+		{
+			"id": "f8e1ccef-e3c7-4dbd-af73-dcaf447ca784",
+			"name": "Get single blog post by ID",
+			"url": "http://localhost:8080/blogpost/e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Response has blog post object": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has blog post object": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Response has blog post object": true
+				}
+			]
+		},
+		{
+			"id": "2893af1c-3dcb-423c-b367-1dcbeb10f7cb",
+			"name": "Get non-existent blog post (404)",
+			"url": "http://localhost:8080/blogpost/00000000-0000-0000-0000-000000000000",
+			"time": 9,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status code is 404 Not Found": true
+			},
+			"testPassFailCounts": {
+				"Status code is 404 Not Found": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"Status code is 404 Not Found": true
+				}
+			]
+		},
+		{
+			"id": "f7b934e4-32e1-469d-872a-8395b04a51a7",
+			"name": "Verify page size enforcement (UC4)",
+			"url": "http://localhost:8080/blogpost?size=10",
+			"time": 17,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Page size is always 5 regardless of request parameter": true,
+				"Content array has at most 5 items": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Page size is always 5 regardless of request parameter": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content array has at most 5 items": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Page size is always 5 regardless of request parameter": true,
+					"Content array has at most 5 items": true
+				}
+			]
+		},
+		{
+			"id": "2af087a4-5999-44d4-9bd2-9626ce279640",
+			"name": "Edit own blog post (User)",
+			"url": "http://localhost:8080/blogpost/58c21583-586a-4547-8d55-468954fe3c58",
+			"time": 41,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 OK": true,
+				"Response has updated blog post": true,
+				"Content is updated": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has updated blog post": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content is updated": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				41
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": true,
+					"Response has updated blog post": true,
+					"Content is updated": true
+				}
+			]
+		},
+		{
+			"id": "67ef37e0-4ce8-458e-ae6d-c14cfe41399f",
+			"name": "Edit without authentication (403)",
+			"url": "http://localhost:8080/blogpost/e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f",
+			"time": 5,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 403 Forbidden": true
+			},
+			"testPassFailCounts": {
+				"Status code is 403 Forbidden": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				5
+			],
+			"allTests": [
+				{
+					"Status code is 403 Forbidden": true
+				}
+			]
+		},
+		{
+			"id": "4a7e46cf-46a7-47c5-8f15-e9a0fd5d873f",
+			"name": "Edit another user's post (403)",
+			"url": "http://localhost:8080/blogpost/f9b02c43-9d57-5f90-b6a3-2b3c4d5e6f7a",
+			"time": 14,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 403 Forbidden": true
+			},
+			"testPassFailCounts": {
+				"Status code is 403 Forbidden": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Status code is 403 Forbidden": true
+				}
+			]
+		},
+		{
+			"id": "4bbf12eb-f70f-4407-8e64-314eb46a506d",
+			"name": "Edit with invalid data (title too short)",
+			"url": "http://localhost:8080/blogpost/58c21583-586a-4547-8d55-468954fe3c58",
+			"time": 11,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400 Bad Request": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400 Bad Request": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Status code is 400 Bad Request": true
+				}
+			]
+		},
+		{
+			"id": "b729d78e-a8ef-44c6-9def-66d95a2faf80",
+			"name": "Edit non-existent post (404)",
+			"url": "http://localhost:8080/blogpost/00000000-0000-0000-0000-000000000000",
+			"time": 14,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status code is 404 Not Found": true
+			},
+			"testPassFailCounts": {
+				"Status code is 404 Not Found": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Status code is 404 Not Found": true
+				}
+			]
+		},
+		{
+			"id": "00c70044-5f6a-44cb-85d5-c7e5702d1b5a",
+			"name": "Delete without authentication (403)",
+			"url": "http://localhost:8080/blogpost/e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f",
+			"time": 4,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 403 Forbidden": true
+			},
+			"testPassFailCounts": {
+				"Status code is 403 Forbidden": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4
+			],
+			"allTests": [
+				{
+					"Status code is 403 Forbidden": true
+				}
+			]
+		},
+		{
+			"id": "81201ad9-3bc4-4aec-b63f-0ceaa5fb4a43",
+			"name": "Delete another user's post (403)",
+			"url": "http://localhost:8080/blogpost/f9b02c43-9d57-5f90-b6a3-2b3c4d5e6f7a",
+			"time": 13,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {
+				"Status code is 403 Forbidden": true
+			},
+			"testPassFailCounts": {
+				"Status code is 403 Forbidden": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Status code is 403 Forbidden": true
+				}
+			]
+		},
+		{
+			"id": "48c4d400-2397-49d9-86f1-dba4c1213e1c",
+			"name": "Delete non-existent post (404)",
+			"url": "http://localhost:8080/blogpost/00000000-0000-0000-0000-000000000000",
+			"time": 11,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status code is 404 Not Found": true
+			},
+			"testPassFailCounts": {
+				"Status code is 404 Not Found": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Status code is 404 Not Found": true
+				}
+			]
+		},
+		{
+			"id": "7ac45cb6-b9ed-403c-b68c-e720e35d5ad5",
+			"name": "Delete own blog post (User)",
+			"url": "http://localhost:8080/blogpost/58c21583-586a-4547-8d55-468954fe3c58",
+			"time": 177,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Status code is 204 No Content": true
+			},
+			"testPassFailCounts": {
+				"Status code is 204 No Content": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				177
+			],
+			"allTests": [
+				{
+					"Status code is 204 No Content": true
+				}
+			]
+		},
+		{
+			"id": "80d93172-716e-4298-a22c-b849f96eedc1",
+			"name": "Admin edits own blog post",
+			"url": "http://localhost:8080/blogpost/admin/35ad1195-70f7-4fdb-9996-911d9f7d839e",
+			"time": 26,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 OK": true,
+				"Blog post is updated": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Blog post is updated": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				26
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": true,
+					"Blog post is updated": true
+				}
+			]
+		},
+		{
+			"id": "c6098616-95f7-48fe-895e-70e5b5f1f6fd",
+			"name": "Admin edits another user's post (UC5.1)",
+			"url": "http://localhost:8080/blogpost/admin/e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f",
+			"time": 20,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 OK": true,
+				"Admin can edit any post": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Admin can edit any post": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Status code is 200 OK": true,
+					"Admin can edit any post": true
+				}
+			]
+		},
+		{
+			"id": "c49f7b64-46e4-42da-bedb-29a580c67943",
+			"name": "Admin deletes another user's post (UC5.2)",
+			"url": "http://localhost:8080/blogpost/admin/a0c13d54-0e68-6a01-c7b4-3c4d5e6f7a8b",
+			"time": 19,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Status code is 204 No Content": true
+			},
+			"testPassFailCounts": {
+				"Status code is 204 No Content": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				19
+			],
+			"allTests": [
+				{
+					"Status code is 204 No Content": true
+				}
+			]
+		},
+		{
+			"id": "18dcccdd-c306-4a8c-96c7-478fbae67cdd",
+			"name": "Admin deletes own post",
+			"url": "http://localhost:8080/blogpost/35ad1195-70f7-4fdb-9996-911d9f7d839e",
+			"time": 15,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Status code is 204 No Content": true
+			},
+			"testPassFailCounts": {
+				"Status code is 204 No Content": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Status code is 204 No Content": true
+				}
+			]
+		},
+		{
+			"id": "48730074-1566-4f06-b139-26ff05240ac0",
+			"name": "Empty title",
+			"url": "http://localhost:8080/blogpost",
+			"time": 17,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400 Bad Request": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400 Bad Request": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"Status code is 400 Bad Request": true
+				}
+			]
+		},
+		{
+			"id": "7fdbd6d6-9f37-43e6-9bd2-a6bcef5b9285",
+			"name": "Empty text",
+			"url": "http://localhost:8080/blogpost",
+			"time": 11,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400 Bad Request": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400 Bad Request": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Status code is 400 Bad Request": true
+				}
+			]
+		},
+		{
+			"id": "17d8e3b1-2698-4a98-9c83-9da95e82f5db",
+			"name": "Title exactly 5 characters (boundary - should pass)",
+			"url": "http://localhost:8080/blogpost",
+			"time": 18,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code is 201 Created": true,
+				"Title with exactly 5 chars is accepted": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201 Created": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Title with exactly 5 chars is accepted": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Status code is 201 Created": true,
+					"Title with exactly 5 chars is accepted": true
+				}
+			]
+		},
+		{
+			"id": "f05b771a-07c3-4ff6-9aea-653a361f0d66",
+			"name": "Title exactly 4 characters (boundary - should fail)",
+			"url": "http://localhost:8080/blogpost",
+			"time": 10,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400 Bad Request": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400 Bad Request": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status code is 400 Bad Request": true
+				}
+			]
+		},
+		{
+			"id": "c87f1cf1-cd2d-4e9d-bde1-2569c9a2a1a0",
+			"name": "Text exactly 20 characters (boundary - should pass)",
+			"url": "http://localhost:8080/blogpost",
+			"time": 15,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code is 201 Created": true,
+				"Text with exactly 20 chars is accepted": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201 Created": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Text with exactly 20 chars is accepted": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Status code is 201 Created": true,
+					"Text with exactly 20 chars is accepted": true
+				}
+			]
+		},
+		{
+			"id": "c3dc87e8-8612-4ef0-9fc4-10ae38ab1c0b",
+			"name": "Text exactly 19 characters (boundary - should fail)",
+			"url": "http://localhost:8080/blogpost",
+			"time": 9,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400 Bad Request": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400 Bad Request": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				9
+			],
+			"allTests": [
+				{
+					"Status code is 400 Bad Request": true
+				}
+			]
+		},
+		{
+			"id": "4e3605be-2451-42a9-8f3d-f5e8abb52e85",
+			"name": "Very long inputs (stress test)",
+			"url": "http://localhost:8080/blogpost",
+			"time": 10,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400 Bad Request": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400 Bad Request": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				10
+			],
+			"allTests": [
+				{
+					"Status code is 400 Bad Request": true
+				}
+			]
+		},
+		{
+			"id": "c3d6b616-7c5c-4861-8564-4995871875d0",
+			"name": "Unicode and emoji characters",
+			"url": "http://localhost:8080/blogpost",
+			"time": 16,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code is 201 Created": true,
+				"Unicode characters are preserved": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201 Created": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Unicode characters are preserved": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Status code is 201 Created": true,
+					"Unicode characters are preserved": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 1324,
+	"collection": {
+		"requests": [
+			{
+				"id": "7d263659-6022-4432-9e40-9f4837ff3315",
+				"method": "POST"
+			},
+			{
+				"id": "4d53a2be-a121-4b10-9dd6-f5ac74c8139d",
+				"method": "POST"
+			},
+			{
+				"id": "ef948c40-8174-4e5a-b5b7-f80178442d8c",
+				"method": "POST"
+			},
+			{
+				"id": "cff4e643-430c-48ef-a5a5-fdb2c87a74cb",
+				"method": "POST"
+			},
+			{
+				"id": "e20b1e0c-da0c-4d3b-b240-1f22c5b2fb0a",
+				"method": "POST"
+			},
+			{
+				"id": "6c5d8b84-9551-404f-b6b9-31d329162624",
+				"method": "POST"
+			},
+			{
+				"id": "740af82c-688a-4c36-866d-2540f049130b",
+				"method": "POST"
+			},
+			{
+				"id": "68250a59-79f0-4df0-97c3-ebe051b1e32e",
+				"method": "POST"
+			},
+			{
+				"id": "c9628105-1be5-46ba-bc8c-4f2d4fca7a9a",
+				"method": "POST"
+			},
+			{
+				"id": "66d2137e-f75b-4601-855d-42a35b716846",
+				"method": "POST"
+			},
+			{
+				"id": "7cd8f19e-f88e-4f48-99b6-2e2a78255324",
+				"method": "GET"
+			},
+			{
+				"id": "f2856452-1eb0-4c80-9174-e961bb7f19c5",
+				"method": "GET"
+			},
+			{
+				"id": "e415acd1-2c37-41ef-9154-0d4fa362b1cb",
+				"method": "GET"
+			},
+			{
+				"id": "8f3373a9-b6f9-4c35-9bc5-97f48fb9b60f",
+				"method": "GET"
+			},
+			{
+				"id": "44025a09-0387-417d-81a0-de7df61ac609",
+				"method": "GET"
+			},
+			{
+				"id": "9d704a09-7f76-447c-8acb-38b557175fca",
+				"method": "GET"
+			},
+			{
+				"id": "2a47e972-de7f-4fa3-ab1e-ce74ad5d7071",
+				"method": "GET"
+			},
+			{
+				"id": "f8e1ccef-e3c7-4dbd-af73-dcaf447ca784",
+				"method": "GET"
+			},
+			{
+				"id": "2893af1c-3dcb-423c-b367-1dcbeb10f7cb",
+				"method": "GET"
+			},
+			{
+				"id": "f7b934e4-32e1-469d-872a-8395b04a51a7",
+				"method": "GET"
+			},
+			{
+				"id": "2af087a4-5999-44d4-9bd2-9626ce279640",
+				"method": "PUT"
+			},
+			{
+				"id": "67ef37e0-4ce8-458e-ae6d-c14cfe41399f",
+				"method": "PUT"
+			},
+			{
+				"id": "4a7e46cf-46a7-47c5-8f15-e9a0fd5d873f",
+				"method": "PUT"
+			},
+			{
+				"id": "4bbf12eb-f70f-4407-8e64-314eb46a506d",
+				"method": "PUT"
+			},
+			{
+				"id": "b729d78e-a8ef-44c6-9def-66d95a2faf80",
+				"method": "PUT"
+			},
+			{
+				"id": "00c70044-5f6a-44cb-85d5-c7e5702d1b5a",
+				"method": "DELETE"
+			},
+			{
+				"id": "81201ad9-3bc4-4aec-b63f-0ceaa5fb4a43",
+				"method": "DELETE"
+			},
+			{
+				"id": "48c4d400-2397-49d9-86f1-dba4c1213e1c",
+				"method": "DELETE"
+			},
+			{
+				"id": "7ac45cb6-b9ed-403c-b68c-e720e35d5ad5",
+				"method": "DELETE"
+			},
+			{
+				"id": "80d93172-716e-4298-a22c-b849f96eedc1",
+				"method": "PUT"
+			},
+			{
+				"id": "c6098616-95f7-48fe-895e-70e5b5f1f6fd",
+				"method": "PUT"
+			},
+			{
+				"id": "c49f7b64-46e4-42da-bedb-29a580c67943",
+				"method": "DELETE"
+			},
+			{
+				"id": "18dcccdd-c306-4a8c-96c7-478fbae67cdd",
+				"method": "DELETE"
+			},
+			{
+				"id": "48730074-1566-4f06-b139-26ff05240ac0",
+				"method": "POST"
+			},
+			{
+				"id": "7fdbd6d6-9f37-43e6-9bd2-a6bcef5b9285",
+				"method": "POST"
+			},
+			{
+				"id": "17d8e3b1-2698-4a98-9c83-9da95e82f5db",
+				"method": "POST"
+			},
+			{
+				"id": "f05b771a-07c3-4ff6-9aea-653a361f0d66",
+				"method": "POST"
+			},
+			{
+				"id": "c87f1cf1-cd2d-4e9d-bde1-2569c9a2a1a0",
+				"method": "POST"
+			},
+			{
+				"id": "c3dc87e8-8612-4ef0-9fc4-10ae38ab1c0b",
+				"method": "POST"
+			},
+			{
+				"id": "4e3605be-2451-42a9-8f3d-f5e8abb52e85",
+				"method": "POST"
+			},
+			{
+				"id": "c3d6b616-7c5c-4861-8564-4995871875d0",
+				"method": "POST"
+			}
+		]
+	}
+}

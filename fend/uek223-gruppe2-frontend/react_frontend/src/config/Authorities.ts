@@ -1,0 +1,15 @@
+enum authorities {
+  /*
+    add your authorities here. E.g:
+  */
+  USER_CREATE = "USER_CREATE",
+  USER_READ = "USER_READ",
+  USER_DEACTIVATE = "USER_DEACTIVATE",
+  USER_MODIFY = "USER_MODIFY",
+  BLOGPOST_CREATE = "BLOGPOST_CREATE",
+  BLOGPOST_READ = "BLOGPOST_READ",
+  BLOGPOST_MODIFY = "BLOGPOST_MODIFY",
+  BLOGPOST_DELETE = "BLOGPOST_DELETE",
+}
+
+export default authorities;

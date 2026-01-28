@@ -1,0 +1,1903 @@
+{
+    "info": {
+        "_postman_id": "a1b2c3d4-e5f6-4789-a0b1-c2d3e4f5a6b7",
+        "name": "BlogPost API Tests - UC1-UC5 Complete",
+        "description": "Test collection for Blog Post API covering all use UC1-UC5 with positive, negative, authorization, validation, and edge case tests.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "0. Authentication",
+            "item": [
+                {
+                    "name": "Login as Admin",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has Authorization header\", function () {",
+                                    "    var authHeader = pm.response.headers.get('Authorization');",
+                                    "    pm.expect(authHeader).to.exist;",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Token is extracted and stored\", function () {",
+                                    "    var authHeader = pm.response.headers.get('Authorization');",
+                                    "    pm.expect(authHeader).to.include('Bearer ');",
+                                    "    var token = authHeader.replace('Bearer ', '');",
+                                    "    pm.expect(token).to.have.length.above(0);",
+                                    "    pm.environment.set(\"adminToken\", token);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"{{adminEmail}}\",\n    \"password\": \"{{adminPassword}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/user/login",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "user",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Login as User",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has Authorization header\", function () {",
+                                    "    var authHeader = pm.response.headers.get('Authorization');",
+                                    "    pm.expect(authHeader).to.exist;",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Token is extracted and stored\", function () {",
+                                    "    var authHeader = pm.response.headers.get('Authorization');",
+                                    "    pm.expect(authHeader).to.include('Bearer ');",
+                                    "    var token = authHeader.replace('Bearer ', '');",
+                                    "    pm.expect(token).to.have.length.above(0);",
+                                    "    pm.environment.set(\"userToken\", token);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"{{userEmail}}\",\n    \"password\": \"{{userPassword}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/user/login",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "user",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "1. UC1 - Create Blog Post",
+            "item": [
+                {
+                    "name": "Create blog post with valid data (User)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201 Created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has blog post object\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.id).to.exist;",
+                                    "    pm.expect(jsonData.title).to.exist;",
+                                    "    pm.expect(jsonData.text).to.exist;",
+                                    "    pm.expect(jsonData.category).to.exist;",
+                                    "    pm.expect(jsonData.author).to.exist;",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Title matches input\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.title).to.eql(\"My Test Blog Post\");",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Author is automatically assigned\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.author).to.exist;",
+                                    "    pm.expect(jsonData.author.email).to.eql(\"user@example.com\");",
+                                    "});",
+                                    "",
+                                    "// Store the created blog post ID for later tests",
+                                    "var jsonData = pm.response.json();",
+                                    "pm.environment.set(\"userCreatedPostId\", jsonData.id);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"My Test Blog Post\",\n    \"text\": \"This is a test blog post with sufficient content to meet the minimum requirements.\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create blog post with valid data (Admin)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201 Created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has blog post object\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.id).to.exist;",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Author is admin\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.author.email).to.eql(\"admin@example.com\");",
+                                    "});",
+                                    "",
+                                    "// Store the created blog post ID for later tests",
+                                    "var jsonData = pm.response.json();",
+                                    "pm.environment.set(\"adminCreatedPostId\", jsonData.id);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{adminToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Admin Test Post\",\n    \"text\": \"This is a test blog post created by admin with sufficient content.\",\n    \"category\": \"Administration\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create without authentication (403)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 403 Forbidden\", function () {",
+                                    "    pm.response.to.have.status(403);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Unauthorized Post\",\n    \"text\": \"This should fail due to missing authentication.\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create with title too short (<5 chars)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 400 Bad Request\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Test\",\n    \"text\": \"This should fail due to title being too short (only 4 chars).\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create with text too short (<20 chars)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 400 Bad Request\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Valid Title\",\n    \"text\": \"Too short text\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create with empty category",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 400 Bad Request\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Valid Title\",\n    \"text\": \"This is valid content with more than 20 characters.\",\n    \"category\": \"\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create with very long title (edge case)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 400 Bad Request\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"This is a very long title that tests the maximum length handling of the blog post title field and ensures the system can handle extended text input\",\n    \"text\": \"This is a test blog post with a very long title to verify edge case handling.\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create with special characters",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201 Created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Special characters are preserved\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.title).to.include(\"<>&\\\"'!@#$%^&*()\");",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Test <>&\\\"'!@#$%^&*() Special Chars\",\n    \"text\": \"Testing special characters: <html>tags</html>, quotes \\\"'`, symbols !@#$%^&*()_+-=[]{}|;:,.<>?\",\n    \"category\": \"Edge Cases & Tests\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "2. UC4 - Read Blog Posts (Public)",
+            "item": [
+                {
+                    "name": "Get all blog posts (default pagination)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has pagination structure\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.content).to.be.an('array');",
+                                    "    pm.expect(jsonData.totalPages).to.exist;",
+                                    "    pm.expect(jsonData.totalElements).to.exist;",
+                                    "    pm.expect(jsonData.currentPage).to.exist;",
+                                    "    pm.expect(jsonData.pageSize).to.exist;",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Page size is 5 (UC4 requirement)\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.pageSize).to.eql(5);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Content array has at most 5 items\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.content.length).to.be.at.most(5);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Each blog post has required fields\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    if (jsonData.content.length > 0) {",
+                                    "        var post = jsonData.content[0];",
+                                    "        pm.expect(post.id).to.exist;",
+                                    "        pm.expect(post.title).to.exist;",
+                                    "        pm.expect(post.text).to.exist;",
+                                    "        pm.expect(post.category).to.exist;",
+                                    "        pm.expect(post.author).to.exist;",
+                                    "    }",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get blog posts - page 2",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Current page is 1 (0-indexed page 2)\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.currentPage).to.eql(1);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Page size is still 5\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.pageSize).to.eql(5);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost?page=1",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get blog posts - sorted by title ASC",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Posts are sorted by title in ascending order\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    if (jsonData.content.length > 1) {",
+                                    "        for (let i = 0; i < jsonData.content.length - 1; i++) {",
+                                    "            pm.expect(jsonData.content[i].title.toLowerCase() <= jsonData.content[i + 1].title.toLowerCase()).to.be.true;",
+                                    "        }",
+                                    "    } else {",
+                                    "        console.log(\"Not enough posts to test sorting\");",
+                                    "    }",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost?sortBy=title&sortOrder=asc",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ],
+                            "query": [
+                                {
+                                    "key": "sortBy",
+                                    "value": "title"
+                                },
+                                {
+                                    "key": "sortOrder",
+                                    "value": "asc"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get blog posts - sorted by category DESC",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has content\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.content).to.be.an('array');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost?sortBy=category&sortOrder=desc",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ],
+                            "query": [
+                                {
+                                    "key": "sortBy",
+                                    "value": "category"
+                                },
+                                {
+                                    "key": "sortOrder",
+                                    "value": "desc"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get blog posts - filtered by category 'Technology'",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"All posts have category 'Technology'\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    jsonData.content.forEach(function(post) {",
+                                    "        pm.expect(post.category).to.eql('Technology');",
+                                    "    });",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost?category=Technology",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ],
+                            "query": [
+                                {
+                                    "key": "category",
+                                    "value": "Technology"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get blog posts - filtered by author ID",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"All posts have correct author ID\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    var authorId = pm.environment.get(\"userId\");",
+                                    "    jsonData.content.forEach(function(post) {",
+                                    "        pm.expect(post.author.id).to.eql(authorId);",
+                                    "    });",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost?authorId={{userId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ],
+                            "query": [
+                                {
+                                    "key": "authorId",
+                                    "value": "{{userId}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get blog posts - combined filter (category + author)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"All posts match both filters\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    var authorId = pm.environment.get(\"userId\");",
+                                    "    jsonData.content.forEach(function(post) {",
+                                    "        pm.expect(post.category).to.eql('Development');",
+                                    "        pm.expect(post.author.id).to.eql(authorId);",
+                                    "    });",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost?category=Development&authorId={{userId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ],
+                            "query": [
+                                {
+                                    "key": "category",
+                                    "value": "Development"
+                                },
+                                {
+                                    "key": "authorId",
+                                    "value": "{{userId}}"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get single blog post by ID",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has blog post object\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.id).to.exist;",
+                                    "    pm.expect(jsonData.title).to.exist;",
+                                    "    pm.expect(jsonData.text).to.exist;",
+                                    "    pm.expect(jsonData.category).to.exist;",
+                                    "    pm.expect(jsonData.author).to.exist;",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get non-existent blog post (404)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 404 Not Found\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/00000000-0000-0000-0000-000000000000",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "00000000-0000-0000-0000-000000000000"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Verify page size enforcement (UC4)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Page size is always 5 regardless of request parameter\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.pageSize).to.eql(5);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Content array has at most 5 items\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.content.length).to.be.at.most(5);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost?size=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ],
+                            "query": [
+                                {
+                                    "key": "size",
+                                    "value": "10",
+                                    "description": "Should be ignored and enforced to 5"
+                                }
+                            ]
+                        },
+                        "description": "UC4 requires exactly 5 posts per page. This test verifies the backend enforces this even if a different size is requested."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "3. UC2 - Edit Own Blog Post",
+            "item": [
+                {
+                    "name": "Edit own blog post (User)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200 OK\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has updated blog post\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.id).to.exist;",
+                                    "    pm.expect(jsonData.title).to.eql(\"Updated Test Blog Post\");",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Content is updated\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.text).to.include(\"updated\");",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Updated Test Blog Post\",\n    \"text\": \"This is the updated content with more than 20 characters.\",\n    \"category\": \"Updated Category\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/{{userCreatedPostId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "{{userCreatedPostId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Edit without authentication (403)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 403 Forbidden\", function () {",
+                                    "    pm.response.to.have.status(403);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Unauthorized Edit\",\n    \"text\": \"This should fail due to missing authentication.\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Edit another user's post (403)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 403 Forbidden\", function () {",
+                                    "    pm.response.to.have.status(403);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Trying to Edit Admin Post\",\n    \"text\": \"This should fail - user trying to edit admin's post.\",\n    \"category\": \"Unauthorized\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/f9b02c43-9d57-5f90-b6a3-2b3c4d5e6f7a",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "f9b02c43-9d57-5f90-b6a3-2b3c4d5e6f7a"
+                            ]
+                        },
+                        "description": "Post f9b02c43-9d57-5f90-b6a3-2b3c4d5e6f7a is created by admin, so regular user should get 403"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Edit with invalid data (title too short)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 400 Bad Request\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Bad\",\n    \"text\": \"Valid content with more than 20 characters.\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/{{userCreatedPostId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "{{userCreatedPostId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Edit non-existent post (404)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 404 Not Found\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Valid Title\",\n    \"text\": \"Valid content with more than 20 characters.\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/00000000-0000-0000-0000-000000000000",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "00000000-0000-0000-0000-000000000000"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "4. UC3 - Delete Own Blog Post",
+            "item": [
+                {
+                    "name": "Delete without authentication (403)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 403 Forbidden\", function () {",
+                                    "    pm.response.to.have.status(403);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete another user's post (403)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 403 Forbidden\", function () {",
+                                    "    pm.response.to.have.status(403);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/f9b02c43-9d57-5f90-b6a3-2b3c4d5e6f7a",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "f9b02c43-9d57-5f90-b6a3-2b3c4d5e6f7a"
+                            ]
+                        },
+                        "description": "Post f9b02c43-9d57-5f90-b6a3-2b3c4d5e6f7a is created by admin"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete non-existent post (404)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 404 Not Found\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/00000000-0000-0000-0000-000000000000",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "00000000-0000-0000-0000-000000000000"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete own blog post (User)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 204 No Content\", function () {",
+                                    "    pm.response.to.have.status(204);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/{{userCreatedPostId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "{{userCreatedPostId}}"
+                            ]
+                        },
+                        "description": "Delete the blog post created by this user earlier in the test suite"
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "5. UC5 - Admin Edit/Delete Any Post",
+            "item": [
+                {
+                    "name": "Admin edits own blog post",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200 OK\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Blog post is updated\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.title).to.include(\"Admin\");",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{adminToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Admin Edited Own Post\",\n    \"text\": \"This is admin editing their own post with sufficient content.\",\n    \"category\": \"Administration\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/admin/{{adminCreatedPostId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "admin",
+                                "{{adminCreatedPostId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Admin edits another user's post (UC5.1)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200 OK\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Admin can edit any post\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.title).to.include(\"Moderated\");",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{adminToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Moderated by Admin\",\n    \"text\": \"Admin has edited this user's post for moderation purposes.\",\n    \"category\": \"Technology\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "admin",
+                                "e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f"
+                            ]
+                        },
+                        "description": "Post e8a91b32-8c46-4e89-a5f2-1a2b3c4d5e6f is created by regular user"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Admin deletes another user's post (UC5.2)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 204 No Content\", function () {",
+                                    "    pm.response.to.have.status(204);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{adminToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/admin/a0c13d54-0e68-6a01-c7b4-3c4d5e6f7a8b",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "admin",
+                                "a0c13d54-0e68-6a01-c7b4-3c4d5e6f7a8b"
+                            ]
+                        },
+                        "description": "Post a0c13d54-0e68-6a01-c7b4-3c4d5e6f7a8b is created by regular user. Admin can delete it."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Admin deletes own post",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 204 No Content\", function () {",
+                                    "    pm.response.to.have.status(204);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{adminToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost/{{adminCreatedPostId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost",
+                                "{{adminCreatedPostId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "6. Edge Cases & Validation",
+            "item": [
+                {
+                    "name": "Empty title",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 400 Bad Request\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"\",\n    \"text\": \"Valid content with more than 20 characters.\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Empty text",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 400 Bad Request\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Valid Title\",\n    \"text\": \"\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Title exactly 5 characters (boundary - should pass)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201 Created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Title with exactly 5 chars is accepted\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.title).to.have.length(5);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Exac5\",\n    \"text\": \"Valid content with more than 20 characters for boundary test.\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Title exactly 4 characters (boundary - should fail)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 400 Bad Request\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Four\",\n    \"text\": \"Valid content with more than 20 characters for boundary test.\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Text exactly 20 characters (boundary - should pass)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201 Created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Text with exactly 20 chars is accepted\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.text).to.have.length(20);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Boundary Test\",\n    \"text\": \"12345678901234567890\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Text exactly 19 characters (boundary - should fail)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 400 Bad Request\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Boundary Test\",\n    \"text\": \"1234567890123456789\",\n    \"category\": \"Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Very long inputs (stress test)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 400 Bad Request\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"This is an extremely long title designed to test the system's ability to handle very large inputs without crashing or truncating data. It contains multiple sentences and continues for a very long time to ensure robustness. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\",\n    \"text\": \"This is an extremely long text content designed to test the system's ability to handle very large inputs without crashing or truncating data. It contains multiple paragraphs and continues for a very long time to ensure robustness. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.\",\n    \"category\": \"Stress Testing\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Unicode and emoji characters",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201 Created\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Unicode characters are preserved\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.title).to.include(\"你好\");",
+                                    "    pm.expect(jsonData.text).to.include(\"\");",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{userToken}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Unicode Test 你好 مرحبا Привет\",\n    \"text\": \"Testing Unicode: 你好世界 مرحبا بالعالم Привет мир Special chars: €£¥\",\n    \"category\": \"Internationalization\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/blogpost",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "blogpost"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8080",
+            "type": "string"
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+# Ensure shell scripts always use LF line endings (Unix style)
+*.sh text eol=lf
+gradlew text eol=lf
+
+# Ensure batch files use CRLF line endings (Windows style)
+*.bat text eol=crlf
+gradlew.bat text eol=crlf
+
+# Let Git handle line endings for other text files automatically
+* text=auto
