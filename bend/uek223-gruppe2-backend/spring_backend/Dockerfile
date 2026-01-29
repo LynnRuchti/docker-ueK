@@ -7,7 +7,7 @@ WORKDIR /app
 # Make gradlew executable
 RUN chmod +x ./gradlew
 # Build the Spring Boot application using Gradle wrapper
-RUN ./gradlew/wrapper --no-daemon bootJar
+RUN ./gradlew --no-daemon bootJar
 # Create a new image with Eclipse Temurin JRE 18 (smaller runtime image)
 FROM eclipse-temurin:18-jre
 # Create a directory named /app
