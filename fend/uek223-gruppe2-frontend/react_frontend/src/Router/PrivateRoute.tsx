@@ -1,32 +1,21 @@
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import * as jwt from 'jsonwebtoken';
 import ActiveUserContext from '../Contexts/ActiveUserContext';
 import AuthorityService from '../Services/AuthorityService';
 import { Button } from '@mui/material';
 import authorities from '../config/Authorities';
+import {jwtDecode} from "jwt-decode";
 
-/**
- * Props interface for PrivateRoute component
- */
 interface Props {
   element: React.ReactElement;
   requiredAuths: authorities[];
 }
 
-/**
- * JWT token structure for decoding
- */
 type JWTType = {
   iss: string;
   exp: number;
 };
 
-/**
- * PrivateRoute - Route wrapper that requires authentication and authorization
- * Checks if user is logged in and has required authorities before rendering the component.
- * Redirects to login if not authenticated, or to unauthorized if lacking permissions.
- */
 const PrivateRoute: React.FC<Props> = ({
   requiredAuths: requiredAuths,
   element: RouteComponent,
@@ -40,10 +29,11 @@ const PrivateRoute: React.FC<Props> = ({
   const isLoggedIn = () => {
     let tokenString = localStorage.getItem('token');
     if (!tokenString) {
+      console.error('no token found');
       return false;
     }
     tokenString = tokenString.replace('Bearer ', '');
-    const token: JWTType = jwt.decode(tokenString) as JWTType;
+    const token = jwtDecode<JWTType>(tokenString);
     // Check if token does not exist or doesn't have an expiration claim or is expired.
     return !(!token || !token.exp || token.exp < Date.now() / 1000);
 

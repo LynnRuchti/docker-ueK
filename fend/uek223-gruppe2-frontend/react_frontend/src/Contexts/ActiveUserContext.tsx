@@ -6,8 +6,7 @@ import AuthorityService from "../Services/AuthorityService";
 import UserService from "../Services/UserService";
 import { User } from "../types/models/User.model";
 import { Nullable } from "../types/Nullable";
-import * as jwt from "jsonwebtoken";
-import {JwtPayload} from "jsonwebtoken";
+import {jwtDecode, JwtPayload} from "jwt-decode";
 
 /**
  * USER_DATA_LOCAL_STORAGE_KEY defines the localStorageKey in which the
@@ -115,7 +114,14 @@ export const ActiveUserContextProvider = ({
    * and redirecting to the LoginPage.
    */
   const logout = () => {
-    resetAuthorization();
+    // If no token is saved inside the local storage clear the localStorage directly
+    if (localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY) === null) {
+      resetAuthorization();
+      return;
+    }
+    // If a token is present send a logout-request and clear the localStorage afterwards
+    api.get("/logout").finally(resetAuthorization);
+    //navigate to login page
     navigate("/login");
   };
 
@@ -139,7 +145,7 @@ export const ActiveUserContextProvider = ({
 
       // Decode token and extract subject (user id)
       const tokenString = authHeader.replace("Bearer ", "");
-      const token = jwt.decode(tokenString) as JwtPayload | null;
+      const token = jwtDecode<JwtPayload | null>(tokenString);
       const userId = token?.sub as string | undefined;
       if (!userId) {
         throw new Error("Invalid token: subject missing");
@@ -180,7 +186,7 @@ export const ActiveUserContextProvider = ({
 
       // Otherwise, decode token to obtain user id and fetch
       const tokenString = token.replace("Bearer ", "");
-      const decoded = jwt.decode(tokenString) as JwtPayload | null;
+      const decoded = jwtDecode<JwtPayload | null>(tokenString);
       const userId = decoded?.sub as string | undefined;
       if (!userId) return null;
 
